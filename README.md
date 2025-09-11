@@ -1,6 +1,6 @@
 # A stackover flow inspired project using Next.js and Appwrite
 
-This is one of full-stack web development in my Udemy course by Mr. Hitesh Choudhary.
+This is one of the full-stack web development projects in my Udemy course by Mr. Hitesh Choudhary.
 
 I `git clone` his repo `https://github.com/hiteshchoudhary/stackflow-appwrite` and am working on project assignments such as debugging and adding features.
 
