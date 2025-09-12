@@ -36,12 +36,15 @@ const Page = async ({
       ])
     );
 
-  const questions = await databases.listDocuments(
-    db,
-    questionCollection,
-    queries
-  );
-  console.log("Questions", questions);
+  // const questions = await databases.listDocuments(
+  //   db,
+  //   questionCollection,
+  //   queries
+  // );
+  // console.log("Questions", questions);
+
+  const questions = await databases.listDocuments(db, questionCollection);
+  console.log("Questions raw:", questions);
 
   questions.documents = await Promise.all(
     questions.documents.map(async (ques) => {
