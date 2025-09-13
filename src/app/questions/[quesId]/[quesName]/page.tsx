@@ -33,11 +33,12 @@ const Page = async ({
 }) => {
   const [question, answers, upvotes, downvotes, comments] = await Promise.all([
     databases.getDocument(db, questionCollection, params.quesId),
-    databases.listDocuments(db, answerCollection, [
-      Query.equal("questionId", params.quesId),
-      Query.orderDesc("$createdAt"),
-    ]),
-    databases.listDocuments(db, answerCollection),
+    databases.listDocuments(
+      db,
+      answerCollection,
+      [Query.equal("questionId", params.quesId)],
+      [Query.orderDesc("$createdAt")]
+    ),
     databases.listDocuments(db, voteCollection, [
       Query.equal("typeId", params.quesId),
       Query.equal("type", "question"),
@@ -50,12 +51,17 @@ const Page = async ({
       Query.equal("voteStatus", "downvoted"),
       Query.limit(1), // for optimization
     ]),
-    databases.listDocuments(db, commentCollection, [
-      Query.equal("type", "question"),
-      Query.equal("typeId", params.quesId),
-      Query.orderDesc("$createdAt"),
-    ]),
+    databases.listDocuments(
+      db,
+      commentCollection,
+      [(Query.equal("type", "question"), Query.equal("typeId", params.quesId))],
+      [Query.orderDesc("$createdAt")]
+    ),
   ]);
+
+  // console.log("Raw answers:", answers);
+  // console.log("Raw question:", question);
+  // console.log("Raw comments:", comments);
 
   // since it is dependent on the question, we fetch it here outside of the Promise.all
   const author = await users.get<UserPrefs>(question.authorId);
