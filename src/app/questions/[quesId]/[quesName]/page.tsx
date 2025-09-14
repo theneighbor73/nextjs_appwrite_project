@@ -188,7 +188,7 @@ const Page = async ({
             <picture>
               <img
                 src={
-                  storage.getFilePreview(
+                  storage.getFileView(
                     questionAttachmentBucket,
                     question.attachmentId
                   ).href
