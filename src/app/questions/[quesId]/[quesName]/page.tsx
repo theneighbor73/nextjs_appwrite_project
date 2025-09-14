@@ -59,7 +59,7 @@ const Page = async ({
     ),
   ]);
 
-  // console.log("Raw answers:", answers);
+  console.log("Raw answers:", answers);
   // console.log("Raw question:", question);
   // console.log("Raw comments:", comments);
 
