@@ -59,10 +59,6 @@ const Page = async ({
     ),
   ]);
 
-  console.log("Raw answers:", answers);
-  // console.log("Raw question:", question);
-  // console.log("Raw comments:", comments);
-
   // since it is dependent on the question, we fetch it here outside of the Promise.all
   const author = await users.get<UserPrefs>(question.authorId);
   [comments.documents, answers.documents] = await Promise.all([
