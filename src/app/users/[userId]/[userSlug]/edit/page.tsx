@@ -4,7 +4,6 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { useAuthStore } from "@/store/Auth";
 import Link from "next/link";
 
@@ -31,14 +30,22 @@ const LabelInputContainer = ({
   );
 };
 
-const Page = () => {
-  const { login } = useAuthStore();
+const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
+  const { user } = useAuthStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [isAuthorized, setIsAuthorized] = React.useState(false);
+
+  React.useEffect(() => {
+    // Check if user is authorized when user data is available
+    if (user) {
+      setIsAuthorized(user.$id === params.userId);
+    }
+  }, [user, params.userId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    // ... update later
     // const formData = new FormData(e.currentTarget);
     // const email = formData.get("email");
     // const password = formData.get("password");
@@ -58,6 +65,20 @@ const Page = () => {
 
     // setIsLoading(() => false);
   };
+
+  // Only show the form if user is authorized
+  if (!isAuthorized) {
+    return (
+      <div className="mx-auto w-full max-w-md rounded-none border border-solid border-white/30 bg-black p-4 shadow-input dark:bg-black md:rounded-2xl md:p-8">
+        <h2 className="text-xl font-bold text-neutral-500 dark:text-neutral-200">
+          Loading...
+        </h2>
+        <p className="mt-4 text-neutral-400">
+          Access denied. You are not authorized to edit this profile.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-md rounded-none border border-solid border-white/30 bg-black p-4 shadow-input dark:bg-black md:rounded-2xl md:p-8">
