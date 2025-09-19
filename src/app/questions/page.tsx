@@ -1,4 +1,4 @@
-import { databases, users } from "@/models/server/config";
+import { users, databases } from "@/models/server/config";
 import {
   answerCollection,
   db,
@@ -23,8 +23,9 @@ const Page = async ({
   searchParams.page ||= "1";
 
   const queries = [
-    Query.orderDesc("$createdAt"),
-    Query.offset((+searchParams.page - 1) * 25),
+    // Query.equal("cache_bust", Date.now().toString()),
+    // Query.createdBefore("2025-09-20T00:00:00Z"),
+    // Query.offset((+searchParams.page - 1) * 25),
     Query.limit(25),
   ];
 
@@ -37,15 +38,20 @@ const Page = async ({
       ])
     );
 
-  // const questions = await databases.listDocuments(
-  //   db,
-  //   questionCollection,
-  //   queries
-  // );
-  // console.log("Questions", questions);
+  const questions = await databases.listDocuments(
+    db,
+    questionCollection,
+    queries
+  );
+  console.log("Questions", questions);
 
-  const questions = await databases.listDocuments(db, questionCollection);
-  console.log("Questions raw:", questions);
+  // const questions = await databases.listDocuments(db, questionCollection);
+  // console.log("Questions raw:", questions);
+
+  questions.documents.sort(
+    (a, b) =>
+      new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
+  );
 
   questions.documents = await Promise.all(
     questions.documents.map(async (ques) => {

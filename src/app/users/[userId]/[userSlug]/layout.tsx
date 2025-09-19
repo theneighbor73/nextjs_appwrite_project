@@ -1,5 +1,5 @@
 import { avatars } from "@/models/client/config";
-import Particles from "@/components/magicui/particles";
+// import Particles from "@/components/magicui/particles";
 import { users } from "@/models/server/config";
 import { UserPrefs } from "@/store/Auth";
 import convertDateToRelativeTime from "@/utils/relativeTime";
@@ -19,19 +19,19 @@ const Layout = async ({
 
   return (
     <>
-      <Particles
+      {/* <Particles
         className="fixed inset-0 h-full w-full"
         quantity={500}
         ease={100}
         color="#ffffff"
         refresh
-      />
+      /> */}
       <div className="container mx-auto space-y-4 px-4 pb-20 pt-32">
         <div className="flex flex-col gap-4 sm:flex-row">
           <div className="w-40 shrink-0">
             <picture className="block w-full">
               <img
-                src={avatars.getInitials(user.name, 200, 200).href}
+                src={avatars.getInitials(user.name, 200, 200)}
                 alt={user.name}
                 className="h-full w-full rounded-xl object-cover"
               />

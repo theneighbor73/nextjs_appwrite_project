@@ -31,7 +31,7 @@ const LabelInputContainer = ({
 };
 
 const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
-  const { user } = useAuthStore();
+  const { user, updateProfile } = useAuthStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
   const [isAuthorized, setIsAuthorized] = React.useState(false);
@@ -43,27 +43,43 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
     }
   }, [user, params.userId]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitProfileDetails = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
-    // ... update later
-    // const formData = new FormData(e.currentTarget);
-    // const email = formData.get("email");
-    // const password = formData.get("password");
 
-    // if (!email || !password) {
-    //     setError(() => "Please fill out all fields");
-    //     return;
-    // }
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email");
+    const password = formData.get("password");
+    const firstname = formData.get("firstname");
+    const lastname = formData.get("lastname");
+    const name = `${firstname} ${lastname}`;
 
-    // setIsLoading(() => true);
-    // setError(() => "");
+    if (email && !password) {
+      setError(() => "When updating email, password is required.");
+      return;
+    }
 
-    // const loginResponse = await login(email.toString(), password.toString());
-    // if (loginResponse.error) {
-    //     setError(() => loginResponse.error!.message);
-    // }
+    if ((firstname && !lastname) || (lastname && !firstname)) {
+      setError(
+        () => "When updating name, both first name and last name are required."
+      );
+      return;
+    }
 
-    // setIsLoading(() => false);
+    setIsLoading(() => true);
+    setError(() => "");
+
+    const updateProfileResponse = await updateProfile(
+      name?.toString(),
+      email?.toString(),
+      password?.toString()
+    );
+    if (updateProfileResponse.error) {
+      setError(() => updateProfileResponse.error!.message);
+    }
+
+    setIsLoading(() => false);
   };
 
   // Only show the form if user is authorized
@@ -93,7 +109,7 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
       )}
 
       {/* --- Profile update form --- */}
-      <form className="my-8">
+      <form className="my-8" onSubmit={handleSubmitProfileDetails}>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
           <Input
@@ -102,6 +118,19 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
             name="email"
             placeholder="your_email@gmail.com"
             type="email"
+          />
+        </LabelInputContainer>
+        <LabelInputContainer className="mb-4">
+          <Label htmlFor="currentpassword">Current password</Label>
+          <p className="text-sm text-neutral-500 dark:text-neutral-200">
+            Password is needed when update email
+          </p>
+          <Input
+            className="text-white"
+            id="currentpassword"
+            name="currentpassword"
+            placeholder="••••••••"
+            type="password"
           />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">

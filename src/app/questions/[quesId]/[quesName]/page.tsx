@@ -183,12 +183,10 @@ const Page = async ({
             />
             <picture>
               <img
-                src={
-                  storage.getFileView(
-                    questionAttachmentBucket,
-                    question.attachmentId
-                  ).href
-                }
+                src={storage.getFileView(
+                  questionAttachmentBucket,
+                  question.attachmentId
+                )}
                 alt={question.title}
                 className="mt-3 rounded-lg"
               />

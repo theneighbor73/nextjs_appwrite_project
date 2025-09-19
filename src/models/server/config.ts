@@ -2,12 +2,12 @@ import env from "@/app/env";
 
 import { Avatars, Client, Databases, Storage, Users } from "node-appwrite";
 
-let client = new Client();
-
-client
+const client = new Client()
   .setEndpoint(env.appwrite.endpoint) // Your API Endpoint
   .setProject(env.appwrite.projectId) // Your project ID
-  .setKey(env.appwrite.apikey); // Your secret API key
+  .setKey(env.appwrite.apikey); // Your secret API key;
+
+client.setSession(Date.now().toString()); //somehow fix the server caching issue :)
 
 const databases = new Databases(client);
 const avatars = new Avatars(client);
