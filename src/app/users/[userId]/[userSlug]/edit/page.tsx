@@ -34,6 +34,7 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
   const { user, updateProfile } = useAuthStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [message, setMessage] = React.useState("");
   const [isAuthorized, setIsAuthorized] = React.useState(false);
 
   React.useEffect(() => {
@@ -48,12 +49,19 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
   ) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    // const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const email = formData.get("email");
     const password = formData.get("password");
     const firstname = formData.get("firstname");
     const lastname = formData.get("lastname");
     const name = `${firstname} ${lastname}`;
+
+    if (!email && !password && !firstname && !lastname) {
+      setError(() => "Please give input to update profile details.");
+      return;
+    }
 
     if (email && !password) {
       setError(() => "When updating email, password is required.");
@@ -67,8 +75,9 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
       return;
     }
 
-    setIsLoading(() => true);
-    setError(() => "");
+    setIsLoading(true);
+    setError("");
+    setMessage("");
 
     const updateProfileResponse = await updateProfile(
       name?.toString(),
@@ -77,6 +86,11 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
     );
     if (updateProfileResponse.error) {
       setError(() => updateProfileResponse.error!.message);
+    } else if (updateProfileResponse.message) {
+      setMessage(updateProfileResponse.message);
+
+      // Clear the form inputs
+      form.reset();
     }
 
     setIsLoading(() => false);
@@ -121,14 +135,14 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
           />
         </LabelInputContainer>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="currentpassword">Current password</Label>
+          <Label htmlFor="password">Current password</Label>
           <p className="text-sm text-neutral-500 dark:text-neutral-200">
             Password is needed when update email
           </p>
           <Input
             className="text-white"
-            id="currentpassword"
-            name="currentpassword"
+            id="password"
+            name="password"
             placeholder="••••••••"
             type="password"
           />
@@ -162,6 +176,12 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
           Save profile
           <BottomGradient />
         </button>
+
+        {message && (
+          <p className="mt-8 text-center text-sm text-green-500 dark:text-green-400">
+            {message}
+          </p>
+        )}
       </form>
 
       <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />

@@ -37,7 +37,11 @@ interface IAuthStore {
     name?: string,
     email?: string,
     password?: string
-  ): Promise<{ success: boolean; error?: AppwriteException | null }>;
+  ): Promise<{
+    success: boolean;
+    message?: string;
+    error?: AppwriteException | null;
+  }>;
 }
 
 export const useAuthStore = create<IAuthStore>()(
@@ -110,20 +114,75 @@ export const useAuthStore = create<IAuthStore>()(
         }
       },
 
+      // async updateProfile(name?: string, email?: string, password?: string) {
+      //   try {
+      //     let updatedUser: Models.User<UserPrefs> | null = null;
+      //     console.log(name);
+
+      //     if (name && name !== "" && name !== " ") {
+      //       try {
+      //         const result = await account.updateName(name);
+      //         console.log(result);
+
+      //         return {
+      //           message:
+      //             "Updated successfully. Please wait a few minutes and refresh.",
+      //           success: true,
+      //         };
+      //       } catch (error) {
+      //         console.log(error);
+      //         return {
+      //           success: false,
+      //           error: error instanceof AppwriteException ? error : null,
+      //         };
+      //       }
+      //     }
+      //     if (email && password) {
+      //       // Appwrite requires current password when updating email
+      //       try {
+      //         const result = await account.updateEmail(email, password);
+      //         console.log(result);
+      //         return {
+      //           message:
+      //             "Email updated successfully. Please wait a few minutes.",
+      //           success: true,
+      //         };
+      //       } catch (error) {
+      //         console.log(error);
+      //         return {
+      //           success: false,
+      //           error: error instanceof AppwriteException ? error : null,
+      //         };
+      //       }
+      //     }
+
+      //     updatedUser = await account.get<UserPrefs>();
+      //     set({ user: updatedUser });
+
+      //     return {
+      //       success: true,
+      //       message:
+      //         "Updated successfully. Please wait a few minutes and refresh.",
+      //     };
+      //   } catch (error) {
+      //     console.log(error);
+      //     return {
+      //       success: false,
+      //       error: error instanceof AppwriteException ? error : null,
+      //     };
+      //   }
+      // },
       async updateProfile(name?: string, email?: string, password?: string) {
         try {
           let updatedUser: Models.User<UserPrefs> | null = null;
+          const messages: string[] = [];
 
-          if (name) {
+          // Update name
+          if (name && name.trim() !== "") {
             try {
               const result = await account.updateName(name);
               console.log(result);
-
-              const result2 = await account.get();
-
-              console.log(result2);
-
-              return { success: true };
+              messages.push("Name updated successfully.");
             } catch (error) {
               console.log(error);
               return {
@@ -132,13 +191,13 @@ export const useAuthStore = create<IAuthStore>()(
               };
             }
           }
+
+          // Update email
           if (email && password) {
-            // Appwrite requires current password when updating email
             try {
               const result = await account.updateEmail(email, password);
               console.log(result);
-
-              return { success: true };
+              messages.push("Email updated successfully.");
             } catch (error) {
               console.log(error);
               return {
@@ -148,10 +207,17 @@ export const useAuthStore = create<IAuthStore>()(
             }
           }
 
+          // Refresh user
           updatedUser = await account.get<UserPrefs>();
           set({ user: updatedUser });
 
-          return { success: true };
+          return {
+            success: true,
+            message:
+              messages.length > 0
+                ? messages.join(" ") + " Update will take a few minutes."
+                : "Updated successfully. Please wait a few minutes and refresh.",
+          };
         } catch (error) {
           console.log(error);
           return {
