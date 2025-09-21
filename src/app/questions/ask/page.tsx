@@ -1,17 +1,5 @@
-// import { databases, users } from "@/models/server/config";
-// import {
-//   answerCollection,
-//   db,
-//   voteCollection,
-//   questionCollection,
-// } from "@/models/name";
-// import { Query } from "node-appwrite";
 import React from "react";
-// import Link from "next/link";
-// import ShimmerButton from "@/components/magicui/shimmer-button";
 import QuestionForm from "@/components/QuestionForm";
-// import { UserPrefs } from "@/store/Auth";
-// import Pagination from "@/components/Pagination";
 
 const Page = () => {
   return (

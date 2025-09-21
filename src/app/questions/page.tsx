@@ -23,10 +23,9 @@ const Page = async ({
   searchParams.page ||= "1";
 
   const queries = [
-    // Query.equal("cache_bust", Date.now().toString()),
-    // Query.createdBefore("2025-09-20T00:00:00Z"),
-    // Query.offset((+searchParams.page - 1) * 25),
+    Query.offset((+searchParams.page - 1) * 25),
     Query.limit(25),
+    Query.orderDesc("$createdAt"),
   ];
 
   if (searchParams.tag) queries.push(Query.equal("tags", searchParams.tag));
@@ -42,15 +41,6 @@ const Page = async ({
     db,
     questionCollection,
     queries
-  );
-  console.log("Questions", questions);
-
-  // const questions = await databases.listDocuments(db, questionCollection);
-  // console.log("Questions raw:", questions);
-
-  questions.documents.sort(
-    (a, b) =>
-      new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
   );
 
   questions.documents = await Promise.all(

@@ -25,7 +25,7 @@ const Page = async ({
     Query.equal("votedById", params.userId),
     Query.offset((+searchParams.page - 1) * 25),
     Query.limit(25),
-    // Query.orderDesc("$createdAt"),
+    Query.orderDesc("$createdAt"),
   ];
 
   if (searchParams.voteStatus)
@@ -33,19 +33,14 @@ const Page = async ({
 
   const votes = await databases.listDocuments(db, voteCollection, query);
 
-  console.log("Raw votes: ", votes);
-
-  votes.documents.sort(
-    (a, b) =>
-      new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
-  );
+  // console.log("Raw votes: ", votes);
 
   votes.documents = await Promise.all(
     votes.documents.map(async (vote) => {
       console.log("Vote record:", vote);
 
       if (vote.type === "answer") {
-        console.log("Fetching answer with ID:", vote.typeId);
+        // console.log("Fetching answer with ID:", vote.typeId);
 
         const answer = await databases.getDocument(
           db,
@@ -54,9 +49,9 @@ const Page = async ({
           [Query.select(["questionId"])]
         );
 
-        console.log("Fetched answer:", answer);
+        // console.log("Fetched answer:", answer);
 
-        console.log("Fetching question with ID:", answer.questionId);
+        // console.log("Fetching question with ID:", answer.questionId);
 
         const questionOfTypeAnswer = await databases.getDocument(
           db,
@@ -65,7 +60,7 @@ const Page = async ({
           [Query.select(["title"])]
         );
 
-        console.log("Fetched question:", questionOfTypeAnswer);
+        // console.log("Fetched question:", questionOfTypeAnswer);
       }
       const questionOfTypeQuestion =
         vote.type === "question"

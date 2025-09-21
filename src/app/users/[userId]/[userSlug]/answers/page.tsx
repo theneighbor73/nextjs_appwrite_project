@@ -20,15 +20,10 @@ const Page = async ({
     Query.equal("authorId", params.userId),
     Query.offset((+searchParams.page - 1) * 25),
     Query.limit(25),
-    // Query.orderDesc("$createdAt"),
+    Query.orderDesc("$createdAt"),
   ];
 
   const answers = await databases.listDocuments(db, answerCollection, queries);
-
-  answers.documents.sort(
-    (a, b) =>
-      new Date(b.$createdAt).getTime() - new Date(a.$createdAt).getTime()
-  );
 
   answers.documents = await Promise.all(
     answers.documents.map(async (ans) => {

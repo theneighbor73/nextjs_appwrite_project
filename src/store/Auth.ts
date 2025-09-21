@@ -42,6 +42,14 @@ interface IAuthStore {
     message?: string;
     error?: AppwriteException | null;
   }>;
+  updatePassword(
+    currentpassword: string,
+    newpassword: string
+  ): Promise<{
+    success: boolean;
+    message?: string;
+    error?: AppwriteException | null;
+  }>;
 }
 
 export const useAuthStore = create<IAuthStore>()(
@@ -114,64 +122,6 @@ export const useAuthStore = create<IAuthStore>()(
         }
       },
 
-      // async updateProfile(name?: string, email?: string, password?: string) {
-      //   try {
-      //     let updatedUser: Models.User<UserPrefs> | null = null;
-      //     console.log(name);
-
-      //     if (name && name !== "" && name !== " ") {
-      //       try {
-      //         const result = await account.updateName(name);
-      //         console.log(result);
-
-      //         return {
-      //           message:
-      //             "Updated successfully. Please wait a few minutes and refresh.",
-      //           success: true,
-      //         };
-      //       } catch (error) {
-      //         console.log(error);
-      //         return {
-      //           success: false,
-      //           error: error instanceof AppwriteException ? error : null,
-      //         };
-      //       }
-      //     }
-      //     if (email && password) {
-      //       // Appwrite requires current password when updating email
-      //       try {
-      //         const result = await account.updateEmail(email, password);
-      //         console.log(result);
-      //         return {
-      //           message:
-      //             "Email updated successfully. Please wait a few minutes.",
-      //           success: true,
-      //         };
-      //       } catch (error) {
-      //         console.log(error);
-      //         return {
-      //           success: false,
-      //           error: error instanceof AppwriteException ? error : null,
-      //         };
-      //       }
-      //     }
-
-      //     updatedUser = await account.get<UserPrefs>();
-      //     set({ user: updatedUser });
-
-      //     return {
-      //       success: true,
-      //       message:
-      //         "Updated successfully. Please wait a few minutes and refresh.",
-      //     };
-      //   } catch (error) {
-      //     console.log(error);
-      //     return {
-      //       success: false,
-      //       error: error instanceof AppwriteException ? error : null,
-      //     };
-      //   }
-      // },
       async updateProfile(name?: string, email?: string, password?: string) {
         try {
           let updatedUser: Models.User<UserPrefs> | null = null;
@@ -225,6 +175,28 @@ export const useAuthStore = create<IAuthStore>()(
             error: error instanceof AppwriteException ? error : null,
           };
         }
+      },
+
+      async updatePassword(newpassword: string, currentpassword: string) {
+        if (currentpassword.trim() !== "" && newpassword.trim() !== "")
+          try {
+            const result = await account.updatePassword(
+              newpassword,
+              currentpassword
+            );
+            console.log("Password updated:", result);
+
+            return {
+              success: true,
+              message: "Password updated successfully",
+            };
+          } catch (error) {
+            console.log(error);
+            return {
+              success: false,
+              error: error instanceof AppwriteException ? error : null,
+            };
+          }
       },
     })),
     {
