@@ -10,15 +10,13 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow">
-        <HeroSectionHeader />
-        {/* <HeroSection /> */}
+        <HeroSection />
 
-        <section className="my-12">
-          <LatestQuestions />
-        </section>
-
-        <section className="my-12">
-          <TopContributers />
+        <section className="ml-12 my-12">
+          <div className="flex space-x-6">
+            <LatestQuestions />
+            <TopContributers />
+          </div>
         </section>
       </main>
       <Footer />

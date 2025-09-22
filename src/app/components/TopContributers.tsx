@@ -14,7 +14,7 @@ const Notification = ({ user }: { user: Models.User<UserPrefs> }) => {
         // animation styles
         "transition-all duration-200 ease-in-out hover:scale-[103%]",
         // light styles
-        "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
+        "bg-black [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
         // dark styles
         "transform-gpu dark:bg-transparent dark:backdrop-blur-md dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]"
       )}
@@ -52,12 +52,14 @@ export default async function TopContributers() {
   const topUsers = await users.list<UserPrefs>([Query.limit(10)]);
 
   return (
-    <div className="bg-background relative flex max-h-[400px] min-h-[400px] w-full max-w-[32rem] flex-col overflow-hidden rounded-lg bg-white/10 p-6 shadow-lg">
-      <AnimatedList>
-        {topUsers.users.map((user) => (
-          <Notification user={user} key={user.$id} />
-        ))}
-      </AnimatedList>
+    <div className="w-1/3">
+      <div className="bg-background relative flex max-h-[400px] min-h-[400px] w-full flex-col overflow-hidden rounded-lg bg-black/10 p-6 shadow-lg">
+        <AnimatedList>
+          {topUsers.users.map((user) => (
+            <Notification user={user} key={user.$id} />
+          ))}
+        </AnimatedList>
+      </div>
     </div>
   );
 }
