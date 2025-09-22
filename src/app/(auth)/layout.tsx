@@ -11,7 +11,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   React.useEffect(() => {
     if (session) {
-      router.push("/questions");
+      router.push("/");
     }
   }, [session, router]);
 

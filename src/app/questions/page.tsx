@@ -9,7 +9,7 @@ import { Query } from "node-appwrite";
 import React from "react";
 import Link from "next/link";
 import ShimmerButton from "@/components/magicui/shimmer-button";
-import Particles from "@/components/magicui/particles";
+// import Particles from "@/components/magicui/particles";
 import QuestionCard from "@/components/QuestionCard";
 import { UserPrefs } from "@/store/Auth";
 import Pagination from "@/components/Pagination";
@@ -106,13 +106,6 @@ const Page = async ({
   // );
   return (
     <>
-      <Particles
-        className="fixed inset-0 h-full w-full"
-        quantity={500}
-        ease={100}
-        color="#ffffff"
-        refresh
-      />
       <div className="container mx-auto px-4 pb-20 pt-36">
         <div className="mb-10 flex items-center justify-between">
           <h1 className="text-3xl font-bold">All Questions</h1>
