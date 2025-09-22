@@ -1,6 +1,8 @@
 import env from "@/app/env";
+import { IndexType } from "node-appwrite";
 
 import { Avatars, Client, Databases, Storage, Users } from "node-appwrite";
+import { db, questionCollection } from "../name";
 
 const client = new Client()
   .setEndpoint(env.appwrite.endpoint) // Your API Endpoint

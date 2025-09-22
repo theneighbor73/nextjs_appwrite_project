@@ -1,4 +1,5 @@
 import { users, databases } from "@/models/server/config";
+import { IndexType } from "node-appwrite";
 import {
   answerCollection,
   db,
