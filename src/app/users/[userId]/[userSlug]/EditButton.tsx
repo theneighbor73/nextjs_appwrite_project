@@ -11,6 +11,8 @@ const EditButton = () => {
 
   if (user?.$id !== userId) return null;
 
+  console.log(user);
+
   return (
     <Link
       href={`/users/${userId}/${userSlug}/edit`}

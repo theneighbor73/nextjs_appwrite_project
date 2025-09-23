@@ -42,9 +42,22 @@ interface IAuthStore {
     message?: string;
     error?: AppwriteException | null;
   }>;
-  updatePassword(
+  updateUserPassword(
     currentpassword: string,
     newpassword: string
+  ): Promise<{
+    success: boolean;
+    message?: string;
+    error?: AppwriteException | null;
+  }>;
+  verifyAccountViaEmail(): Promise<{
+    success: boolean;
+    message?: string;
+    error?: AppwriteException | null;
+  }>;
+  updateVerification(
+    userId: string,
+    secret: string
   ): Promise<{
     success: boolean;
     message?: string;
@@ -103,7 +116,10 @@ export const useAuthStore = create<IAuthStore>()(
       async createAccount(name: string, email: string, password: string) {
         try {
           await account.create(ID.unique(), email, password, name);
-          return { success: true };
+
+          return {
+            success: true,
+          };
         } catch (error) {
           console.log(error);
           return {
@@ -177,7 +193,7 @@ export const useAuthStore = create<IAuthStore>()(
         }
       },
 
-      async updatePassword(newpassword: string, currentpassword: string) {
+      async updateUserPassword(newpassword: string, currentpassword: string) {
         if (currentpassword.trim() !== "" && newpassword.trim() !== "")
           try {
             const result = await account.updatePassword(
@@ -197,6 +213,55 @@ export const useAuthStore = create<IAuthStore>()(
               error: error instanceof AppwriteException ? error : null,
             };
           }
+      },
+
+      async verifyAccountViaEmail() {
+        try {
+          const result = await account.createVerification(
+            "http://localhost:3000/verify"
+          );
+
+          console.log(result);
+
+          return {
+            success: true,
+            message: "Email verification sent successfully",
+          };
+        } catch (error) {
+          console.log(error);
+          return {
+            success: false,
+            error: error instanceof AppwriteException ? error : null,
+          };
+        }
+      },
+
+      async updateVerification(userId?: string, secret?: string) {
+        try {
+          let updatedUser: Models.User<UserPrefs> | null = null;
+
+          // Update name
+
+          const response = await account.updateVerification(userId, secret);
+          console.log(response);
+
+          // Refresh user
+          updatedUser = await account.get<UserPrefs>();
+          set({ user: updatedUser });
+          console.log(updatedUser);
+
+          return {
+            success: true,
+            message:
+              "Account successfully verified, Update might take a few minutes",
+          };
+        } catch (error) {
+          console.log(error);
+          return {
+            success: false,
+            error: error instanceof AppwriteException ? error : null,
+          };
+        }
       },
     })),
     {

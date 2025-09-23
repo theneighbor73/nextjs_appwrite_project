@@ -31,7 +31,7 @@ const LabelInputContainer = ({
 };
 
 const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
-  const { user, updateProfile, updatePassword } = useAuthStore();
+  const { user, updateProfile, updateUserPassword } = useAuthStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error1, setError1] = React.useState("");
   const [message1, setMessage1] = React.useState("");
@@ -131,7 +131,7 @@ const Page = ({ params }: { params: { userId: string; userSlug: string } }) => {
     setError2("");
     setMessage2("");
 
-    const updatePasswordResponse = await updatePassword(
+    const updatePasswordResponse = await updateUserPassword(
       newpassword.toString(),
       currentpassword.toString()
     );

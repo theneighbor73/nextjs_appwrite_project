@@ -5,8 +5,14 @@ import { UserPrefs } from "@/store/Auth";
 import convertDateToRelativeTime from "@/utils/relativeTime";
 import React from "react";
 import EditButton from "./EditButton";
+import EmailVerificationButton from "./EmailVerificationButton";
 import Navbar from "./Navbar";
-import { IconClockFilled, IconUserFilled } from "@tabler/icons-react";
+import {
+  IconCheck,
+  IconAlertCircle,
+  IconClockFilled,
+  IconUserFilled,
+} from "@tabler/icons-react";
 
 const Layout = async ({
   children,
@@ -51,6 +57,7 @@ const Layout = async ({
                   activity&nbsp;
                   {convertDateToRelativeTime(new Date(user.$updatedAt))}
                 </p>
+                <EmailVerificationButton />
               </div>
               <div className="shrink-0">
                 <EditButton />
