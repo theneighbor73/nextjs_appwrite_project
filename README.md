@@ -2,11 +2,12 @@
 
 This is one of the full-stack web development projects in my Udemy course by Mr. Hitesh Choudhary.
 
-I `git clone` his repo `https://github.com/hiteshchoudhary/stackflow-appwrite` and am working on project assignments such as debugging and adding features.
+I `git clone` his repo `https://github.com/hiteshchoudhary/stackflow-appwrite` and completed project assignments.
 
 ## Features
 
-- User authentication with email and password
+- User authentication with email feature - Added
+- Profile update feature - Added
 - Questions and answers
 - Voting system
 - Comments
